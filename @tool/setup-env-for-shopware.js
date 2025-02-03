@@ -2,7 +2,7 @@ const { join, resolve } = require('path');
 
 const srcPath = global.adminPath;
 if (!srcPath) {
-    throw new Error('"globals.adminPath" is not defined. A file path to a Cicada 6 administration is required');
+    throw new Error('"globals.adminPath" is not defined. A file path to a Shopware 6 administration is required');
 }
 
 const disableJestCompatMode = process.env.DISABLE_JEST_COMPAT_MODE === 'true' ?? false;
@@ -17,10 +17,10 @@ if (disableJestCompatMode) {
     window._features_.DISABLE_VUE_COMPAT = true;
 }
 
-const Cicada = require(resolve(join(srcPath, `src/core/cicada.ts`))).CicadaInstance;
+const Shopware = require(resolve(join(srcPath, `src/core/shopware.ts`))).ShopwareInstance;
 
-// Take all keys out of Cicada.compatConfig but set them to true
-const compatConfig = Object.fromEntries(Object.keys(Cicada.compatConfig).map(key => [key, !disableJestCompatMode]));
+// Take all keys out of Shopware.compatConfig but set them to true
+const compatConfig = Object.fromEntries(Object.keys(Shopware.compatConfig).map(key => [key, !disableJestCompatMode]));
 const envBefore = process.env.NODE_ENV;
 
 // src/Administration/Resources/app/administration/node_modules/@vue/compat/index.js loads different files based on NODE_ENV
@@ -33,12 +33,12 @@ configureCompat(compatConfig);
 // Enable Pinia Support
 const { createApp } = require(resolve(join(srcPath, 'node_modules/@vue/compat/dist/vue.cjs.js')));
 const app = createApp();
-app.use(Cicada.Store._rootState)
+app.use(Shopware.Store._rootState)
 
 process.env.NODE_ENV = envBefore;
 
 module.exports = (() => {
-    global.Cicada = Cicada;
+    global.Shopware = Shopware;
     require(resolve(join(srcPath, 'src/app/mixin/index'))).default(); // eslint-disable-line
     require(resolve(join(srcPath, 'src/app/directive/index'))).default(); // eslint-disable-line
     require(resolve(join(srcPath, 'src/app/filter/index'))).default(); // eslint-disable-line
