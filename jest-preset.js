@@ -41,7 +41,6 @@ module.exports = {
     ],
 
     setupFilesAfterEnv: [
-        resolve(join(__dirname, '@tool/setup-env-require-context.js')),
         resolve(join(__dirname, '@tool/setup-env-for-shopware.js')),
     ],
 
